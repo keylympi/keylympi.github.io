@@ -1,239 +1,1430 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>KeyLymPi — Developer</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KeyLymPi.dev — Custom Software Development</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  .site { background: #0a0f0a; color: #e8f5e8; min-height: 100vh; font-family: 'Inter', sans-serif; }
-  nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; border-bottom: 0.5px solid #1a3a1a; position: sticky; top: 0; background: rgba(10,15,10,0.92); backdrop-filter: blur(8px); z-index: 10; }
-  .logo { font-size: 15px; font-weight: 500; color: #4ade80; letter-spacing: 0.05em; font-family: 'JetBrains Mono', monospace; }
-  .logo span { color: #a3f0c3; }
-  .hero { padding: 4rem 2rem 3rem; border-bottom: 0.5px solid #1a3a1a; display: flex; gap: 2.5rem; align-items: flex-start; }
-  .avatar { width: 72px; height: 72px; border-radius: 14px; background: #0f2a0f; border: 0.5px solid #2d5a2d; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 500; color: #4ade80; flex-shrink: 0; }
-  .hero-text { flex: 1; }
-  .hero-tag { display: inline-block; font-size: 11px; letter-spacing: 0.12em; color: #4ade80; border: 0.5px solid #2d5a2d; padding: 3px 10px; border-radius: 100px; margin-bottom: 0.75rem; font-family: 'JetBrains Mono', monospace; }
-  .hero h1 { font-size: 36px; font-weight: 500; color: #f0faf0; line-height: 1.2; margin-bottom: 0.5rem; }
-  .hero h1 em { font-style: normal; color: #4ade80; }
-  .hero-sub { font-size: 13px; color: #6a8a6a; font-family: 'JetBrains Mono', monospace; margin-bottom: 1rem; }
-  .hero p { font-size: 14px; color: #86a886; line-height: 1.75; max-width: 560px; }
-  .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 1.25rem; }
-  .tag { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: #4ade80; background: #0f2a0f; border: 0.5px solid #2d5a2d; padding: 3px 10px; border-radius: 100px; }
-  .stats { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 0.5px solid #1a3a1a; }
-  .stat { padding: 1.5rem 2rem; text-align: center; border-right: 0.5px solid #1a3a1a; }
-  .stat:last-child { border-right: none; }
-  .stat-num { font-size: 28px; font-weight: 500; color: #4ade80; font-family: 'JetBrains Mono', monospace; }
-  .stat-label { font-size: 11px; color: #6a8a6a; margin-top: 3px; letter-spacing: 0.04em; }
-  .section { padding: 2.5rem 2rem; border-bottom: 0.5px solid #1a3a1a; }
-  .section-label { font-size: 11px; color: #4ade80; letter-spacing: 0.1em; margin-bottom: 1.25rem; font-family: 'JetBrains Mono', monospace; }
-  .section h2 { font-size: 18px; font-weight: 500; color: #f0faf0; margin-bottom: 1.5rem; }
-  .xp-list { display: flex; flex-direction: column; gap: 1px; background: #1a3a1a; border: 0.5px solid #1a3a1a; border-radius: 10px; overflow: hidden; }
-  .xp-item { background: #0a0f0a; padding: 1.25rem 1.5rem; display: flex; gap: 1.25rem; align-items: flex-start; }
-  .xp-dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; margin-top: 6px; flex-shrink: 0; }
-  .xp-dot.dim { background: #2d5a2d; }
-  .xp-body { flex: 1; }
-  .xp-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
-  .xp-title { font-size: 14px; font-weight: 500; color: #c8e8c8; }
-  .xp-date { font-size: 11px; color: #4a6a4a; font-family: 'JetBrains Mono', monospace; }
-  .xp-role { font-size: 12px; color: #4ade80; font-family: 'JetBrains Mono', monospace; margin-bottom: 6px; }
-  .xp-desc { font-size: 13px; color: #6a8a6a; line-height: 1.65; }
-  .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: #1a3a1a; border: 0.5px solid #1a3a1a; border-radius: 10px; overflow: hidden; }
-  .skill-block { background: #0a0f0a; padding: 1.25rem 1.5rem; }
-  .skill-cat { font-size: 11px; color: #4ade80; letter-spacing: 0.08em; font-family: 'JetBrains Mono', monospace; margin-bottom: 10px; }
-  .skill-items { display: flex; flex-direction: column; gap: 8px; }
-  .skill-item { display: flex; justify-content: space-between; align-items: center; }
-  .skill-name { font-size: 13px; color: #86a886; }
-  .skill-bar { width: 80px; height: 3px; background: #1a3a1a; border-radius: 100px; overflow: hidden; }
-  .skill-fill { height: 100%; background: #4ade80; border-radius: 100px; }
-  .project-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: #1a3a1a; border: 0.5px solid #1a3a1a; border-radius: 10px; overflow: hidden; }
-  .project-card { background: #0a0f0a; padding: 1.25rem 1.5rem; }
-  .proj-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
-  .proj-name { font-size: 14px; font-weight: 500; color: #c8e8c8; }
-  .proj-badge { font-size: 10px; font-family: 'JetBrains Mono', monospace; color: #4ade80; background: #0f2a0f; border: 0.5px solid #2d5a2d; padding: 2px 8px; border-radius: 100px; }
-  .proj-badge.dim { color: #6a8a6a; background: transparent; border-color: #1a3a1a; }
-  .proj-desc { font-size: 12px; color: #6a8a6a; line-height: 1.65; margin-bottom: 10px; }
-  .proj-stack { display: flex; gap: 6px; flex-wrap: wrap; }
-  .proj-tech { font-size: 10px; font-family: 'JetBrains Mono', monospace; color: #4a6a4a; }
-  footer { padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; border-top: 0.5px solid #1a3a1a; }
-  footer p { font-size: 11px; color: #3a5a3a; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #070d07;
+    --bg2: #0d140d;
+    --bg3: #111a11;
+    --border: #1e2e1e;
+    --border2: #2a3f2a;
+    --green: #2dff6e;
+    --green2: #1fd45a;
+    --green-dim: #1a4a26;
+    --green-glow: rgba(45,255,110,0.08);
+    --text: #e8f0e8;
+    --text2: #8fa88f;
+    --text3: #4a5e4a;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Space Grotesk', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    height: 60px;
+    background: rgba(7,13,7,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 15px;
+    color: var(--green);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+  }
+  .nav-logo span { color: var(--text2); }
+  .nav-links {
+    display: flex;
+    gap: 0.25rem;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text2);
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    transition: all 0.15s;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .nav-links a:hover, .nav-links a.active {
+    color: var(--green);
+    border-color: var(--border2);
+    background: var(--green-glow);
+  }
+  .nav-cta {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--bg) !important;
+    background: var(--green) !important;
+    border-color: var(--green) !important;
+    border-radius: 4px;
+    padding: 6px 16px;
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: opacity 0.15s;
+    cursor: pointer;
+  }
+  .nav-cta:hover { opacity: 0.85 !important; }
+
+  /* ── PAGES ── */
+  .page { display: none; padding-top: 60px; min-height: 100vh; }
+  .page.active { display: block; }
+
+  /* ── HOME ── */
+  .hero {
+    min-height: calc(100vh - 60px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--green);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 1px;
+    background: var(--green);
+  }
+  .hero-title {
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+    color: var(--text);
+  }
+  .hero-title .accent { color: var(--green); }
+  .hero-subtitle {
+    font-family: var(--mono);
+    font-size: clamp(14px, 1.8vw, 17px);
+    color: var(--text2);
+    max-width: 600px;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+  }
+  .hero-subtitle .hl { color: var(--text); }
+
+  .terminal-line {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text3);
+    margin-bottom: 0.4rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .terminal-line .prompt { color: var(--green); }
+  .terminal-line .cmd { color: var(--text2); }
+  .terminal-line .out { color: var(--text3); }
+  #cursor {
+    display: inline-block;
+    width: 9px;
+    height: 14px;
+    background: var(--green);
+    vertical-align: middle;
+    animation: blink 1.1s step-end infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--bg);
+    background: var(--green);
+    border: none;
+    padding: 12px 28px;
+    border-radius: 4px;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: opacity 0.15s;
+    text-decoration: none;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-outline {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--green);
+    background: transparent;
+    border: 1px solid var(--border2);
+    padding: 12px 28px;
+    border-radius: 4px;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: all 0.15s;
+    text-decoration: none;
+  }
+  .btn-outline:hover { border-color: var(--green); background: var(--green-glow); }
+
+  .stats-row {
+    display: flex;
+    gap: 3rem;
+    margin-top: 5rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .stat-item {}
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--green);
+    letter-spacing: -0.03em;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-family: var(--mono);
+    margin-top: 2px;
+  }
+
+  .scroll-grid {
+    display: flex;
+    gap: 1px;
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    margin: 0;
+    background: var(--border);
+  }
+  .scroll-grid-col {
+    flex: 1;
+    background: var(--bg);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .sgc-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .sgc-items {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .sgc-item {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text2);
+    padding: 4px 8px;
+    border-radius: 3px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    cursor: default;
+    transition: all 0.12s;
+  }
+  .sgc-item:hover { color: var(--green); border-color: var(--border2); }
+
+  /* ── WORK ── */
+  .page-header {
+    padding: 4rem 2rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+    border-bottom: 1px solid var(--border);
+  }
+  .page-header h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    line-height: 1.1;
+  }
+  .page-header h1 span { color: var(--green); }
+  .page-header p {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text2);
+    margin-top: 0.75rem;
+  }
+
+  .work-grid {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 4rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .work-card {
+    background: var(--bg2);
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: background 0.15s;
+    cursor: pointer;
+    position: relative;
+  }
+  .work-card:hover { background: var(--bg3); }
+  .work-card-media {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: var(--bg3);
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .work-card-media img, .work-card-media video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .media-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--text3);
+  }
+  .media-placeholder svg { width: 32px; height: 32px; }
+  .media-placeholder span {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .upload-btn {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text2);
+    background: rgba(7,13,7,0.85);
+    border: 1px solid var(--border2);
+    padding: 4px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    transition: all 0.12s;
+  }
+  .upload-btn:hover { color: var(--green); border-color: var(--green); }
+  input[type="file"] { display: none; }
+  .work-card-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--green);
+    background: var(--green-glow);
+    border: 1px solid var(--green-dim);
+    padding: 2px 8px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .tag.gray {
+    color: var(--text3);
+    background: transparent;
+    border-color: var(--border);
+  }
+  .work-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+  .work-card p {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+  .add-project-card {
+    background: var(--bg);
+    border: 2px dashed var(--border2);
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 280px;
+    cursor: pointer;
+    transition: all 0.15s;
+    padding: 2rem;
+    text-align: center;
+  }
+  .add-project-card:hover { border-color: var(--green); background: var(--green-glow); }
+  .add-project-card svg { color: var(--text3); }
+  .add-project-card:hover svg { color: var(--green); }
+  .add-project-card span {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .add-project-card:hover span { color: var(--green); }
+
+  /* ── SKILLS ── */
+  .skills-layout {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .skills-section {
+    background: var(--bg2);
+    padding: 2rem;
+  }
+  .skills-section.full { grid-column: 1 / -1; }
+  .skills-section h2 {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--green);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .skills-section h2::before {
+    content: '';
+    display: block;
+    width: 16px;
+    height: 1px;
+    background: var(--green);
+  }
+  .lang-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 8px;
+  }
+  .lang-item {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: border-color 0.12s;
+    cursor: default;
+  }
+  .lang-item:hover { border-color: var(--green); }
+  .lang-name {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text);
+    font-weight: 500;
+  }
+  .lang-bar-track {
+    height: 2px;
+    background: var(--border2);
+    border-radius: 1px;
+    overflow: hidden;
+  }
+  .lang-bar-fill {
+    height: 100%;
+    background: var(--green);
+    border-radius: 1px;
+    transition: width 0.6s ease;
+  }
+
+  .skill-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .skill-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    transition: border-color 0.12s;
+  }
+  .skill-row:hover { border-color: var(--border2); }
+  .skill-name {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text2);
+  }
+  .skill-badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--green);
+    background: var(--green-glow);
+    border: 1px solid var(--green-dim);
+    padding: 2px 8px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .bio-box {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.25rem;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.8;
+  }
+  .bio-box .placeholder-text {
+    color: var(--text3);
+    font-style: italic;
+  }
+
+  /* ── COMMISSION ── */
+  .commission-layout {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  .commission-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .tier-card {
+    background: var(--bg2);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: relative;
+  }
+  .tier-card.featured {
+    background: var(--bg3);
+    outline: 1px solid var(--green);
+    outline-offset: -1px;
+    z-index: 1;
+  }
+  .tier-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--bg);
+    background: var(--green);
+    padding: 3px 8px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .tier-name {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+  .tier-price {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .tier-price span {
+    font-size: 1rem;
+    color: var(--text3);
+    font-weight: 400;
+  }
+  .tier-desc {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.6;
+    flex: 1;
+  }
+  .tier-features {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    list-style: none;
+    margin-bottom: 1rem;
+  }
+  .tier-features li {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tier-features li::before {
+    content: '▸';
+    color: var(--green);
+    flex-shrink: 0;
+  }
+
+  .commission-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .info-block {
+    background: var(--bg2);
+    padding: 1.75rem;
+  }
+  .info-block h3 {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--green);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .info-block h3::before {
+    content: '';
+    display: block;
+    width: 16px;
+    height: 1px;
+    background: var(--green);
+  }
+  .process-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .process-step {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .step-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--green);
+    background: var(--green-glow);
+    border: 1px solid var(--green-dim);
+    width: 24px;
+    height: 24px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .step-text {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.5;
+    padding-top: 2px;
+  }
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .form-field label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .form-field input, .form-field textarea, .form-field select {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    padding: 8px 12px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.12s;
+    resize: vertical;
+  }
+  .form-field input:focus, .form-field textarea:focus, .form-field select:focus {
+    border-color: var(--green);
+  }
+  .form-field select option { background: var(--bg3); }
+  .form-field textarea { min-height: 80px; }
+
+  /* ── TERMS ── */
+  .terms-layout {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 5rem;
+  }
+  .terms-section {
+    margin-bottom: 2.5rem;
+    border-left: 2px solid var(--border2);
+    padding-left: 1.5rem;
+  }
+  .terms-section h2 {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--green);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.75rem;
+  }
+  .terms-section p, .terms-section li {
+    font-size: 14px;
+    color: var(--text2);
+    line-height: 1.8;
+  }
+  .terms-section ul { padding-left: 1.25rem; }
+  .terms-section li { margin-bottom: 4px; }
+  .terms-placeholder {
+    color: var(--text3);
+    font-style: italic;
+    font-family: var(--mono);
+    font-size: 13px;
+  }
+  .terms-last-updated {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── ADD PROJECT MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(0,0,0,0.75);
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .modal-header h3 {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--green);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .modal-close {
+    background: none;
+    border: 1px solid var(--border2);
+    color: var(--text2);
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.12s;
+  }
+  .modal-close:hover { color: var(--green); border-color: var(--green); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    text-align: center;
+  }
+  footer p {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+  }
+  footer a {
+    color: var(--green);
+    text-decoration: none;
+  }
+  footer a:hover { text-decoration: underline; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 680px) {
+    nav { padding: 0 1rem; }
+    .nav-links { display: none; }
+    .hero { padding: 3rem 1rem; }
+    .work-grid { grid-template-columns: 1fr; padding: 1.5rem 1rem 3rem; }
+    .skills-layout { grid-template-columns: 1fr; }
+    .skills-section.full { grid-column: 1; }
+    .commission-row { grid-template-columns: 1fr; }
+    .commission-info { grid-template-columns: 1fr; }
+    .page-header { padding: 2.5rem 1rem 1.5rem; }
+    .stats-row { gap: 2rem; }
+    .scroll-grid { flex-direction: column; }
+  }
 </style>
 </head>
 <body>
-<div class="site">
 
-  <nav>
-    <div class="logo">Key<span>LymPi</span></div>
-    <div style="display:flex;gap:1.5rem;">
-      <a href="#experience" style="font-size:13px;color:#86a886;text-decoration:none;font-family:'Inter',sans-serif;">Experience</a>
-      <a href="#skills" style="font-size:13px;color:#86a886;text-decoration:none;font-family:'Inter',sans-serif;">Skills</a>
-      <a href="#projects" style="font-size:13px;color:#86a886;text-decoration:none;font-family:'Inter',sans-serif;">Projects</a>
-      <a href="/plugins" style="font-size:13px;color:#86a886;text-decoration:none;font-family:'Inter',sans-serif;">PLUGINS</a>
+<nav>
+  <a class="nav-logo" href="#" onclick="showPage('home')"><span>~/</span>KeyLymPi<span>.dev</span></a>
+  <ul class="nav-links">
+    <li><a href="#" onclick="showPage('home')" id="nav-home" class="active">Home</a></li>
+    <li><a href="#" onclick="showPage('work')" id="nav-work">Work</a></li>
+    <li><a href="#" onclick="showPage('skills')" id="nav-skills">Skills</a></li>
+    <li><a href="#" onclick="showPage('commission')" id="nav-commission">Commission</a></li>
+    <li><a href="#" onclick="showPage('terms')" id="nav-terms">Terms</a></li>
+  </ul>
+  <a class="nav-cta" onclick="showPage('commission')">Hire Me</a>
+</nav>
+
+<!-- ═══════════════ HOME ═══════════════ -->
+<div class="page active" id="page-home">
+  <section class="hero">
+    <div class="hero-eyebrow">Available for commissions</div>
+    <h1 class="hero-title">
+      I can code<br>
+      <span class="accent">anything</span><br>
+      you can think.
+    </h1>
+    <p class="hero-subtitle">TODO</p>
+
+    <div style="margin-top:0.25rem">
+      <div class="terminal-line">
+        <span class="prompt">$</span>
+        <span class="cmd">whoami</span>
+      </div>
+      <div class="terminal-line">
+        <span class="out">// Pi — software dev, commission work open</span>
+      </div>
+      <div class="terminal-line">
+        <span class="prompt">$</span>
+        <span class="cmd">ls ./stack</span>
+      </div>
+      <div class="terminal-line">
+        <span class="out">Java &nbsp; TypeScript &nbsp; Python &nbsp; C++ &nbsp; Rust &nbsp; Kotlin &nbsp; GDScript &nbsp; ...</span>
+      </div>
+      <div class="terminal-line">
+        <span class="prompt">$</span>
+        <span id="cursor"></span>
+      </div>
     </div>
-  </nav>
 
-  <div class="hero">
-    <div class="avatar">KL</div>
-    <div class="hero-text">
-      <div class="hero-tag">Open to commissions</div>
-      <h1>KeyLymPi<em>.</em></h1>
-      <div class="hero-sub">Full-stack developer · Minecraft plugin specialist</div>
-      <p>Self-taught developer with a focus on clean, production-ready code. Started with Minecraft plugin development and expanded into full-stack web — comfortable across the whole stack, from database schema to frontend UI.</p>
-      <div class="tags">
-        <span class="tag">Java</span>
-        <span class="tag">Paper / Spigot</span>
-        <span class="tag">JavaScript</span>
-        <span class="tag">Node.js</span>
-        <span class="tag">SQL</span>
-        <span class="tag">REST APIs</span>
-        <span class="tag">Python</span>
-        <span class="tag">Discord bots</span>
+    <div class="hero-actions">
+      <a class="btn-primary" onclick="showPage('commission')">Start a project</a>
+      <a class="btn-outline" onclick="showPage('work')">View work</a>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-item">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Languages</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Custom</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">0</div>
+        <div class="stat-label">Templates</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">Fast</div>
+        <div class="stat-label">Turnaround</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="scroll-grid">
+    <div class="scroll-grid-col">
+      <div class="sgc-label">Platforms</div>
+      <div class="sgc-items">
+        <div class="sgc-item">Minecraft (Paper / Fabric / Spigot)</div>
+        <div class="sgc-item">Web (React, Node, Next.js)</div>
+        <div class="sgc-item">Desktop (Tauri, Qt, Electron)</div>
+        <div class="sgc-item">Mobile (iOS, Android)</div>
+        <div class="sgc-item">Game Engines (Godot, Unity)</div>
+        <div class="sgc-item">Discord Bots</div>
+      </div>
+    </div>
+    <div class="scroll-grid-col">
+      <div class="sgc-label">What I build</div>
+      <div class="sgc-items">
+        <div class="sgc-item">Custom plugins & mods</div>
+        <div class="sgc-item">Full-stack web apps</div>
+        <div class="sgc-item">Automation tools & scripts</div>
+        <div class="sgc-item">APIs & backend systems</div>
+        <div class="sgc-item">Games & game tools</div>
+        <div class="sgc-item">Anything else</div>
+      </div>
+    </div>
+    <div class="scroll-grid-col">
+      <div class="sgc-label">Process</div>
+      <div class="sgc-items">
+        <div class="sgc-item">Async-first communication</div>
+        <div class="sgc-item">Clear scope & pricing</div>
+        <div class="sgc-item">Regular progress updates</div>
+        <div class="sgc-item">Source code delivered</div>
+        <div class="sgc-item">Post-delivery support</div>
       </div>
     </div>
   </div>
 
-  <div class="stats">
-    <div class="stat"><div class="stat-num">3+</div><div class="stat-label">Years coding</div></div>
-    <div class="stat"><div class="stat-num">20+</div><div class="stat-label">Plugins shipped</div></div>
-    <div class="stat"><div class="stat-num">15+</div><div class="stat-label">Web projects</div></div>
-    <div class="stat"><div class="stat-num">24h</div><div class="stat-label">Avg response</div></div>
+  <footer>
+    <p>© 2025 KeyLymPi · <a onclick="showPage('terms')">Terms of Service</a> · <a href="mailto:pi@keylympi.dev">pi@keylympi.dev</a></p>
+  </footer>
+</div>
+
+<!-- ═══════════════ WORK ═══════════════ -->
+<div class="page" id="page-work">
+  <div class="page-header">
+    <h1>Selected <span>Work</span></h1>
+    <p>TODO</p>
   </div>
 
-  <div id="experience" class="section">
-    <div class="section-label">Experience</div>
-    <h2>What I've worked on</h2>
-    <div class="xp-list">
-      <div class="xp-item">
-        <div class="xp-dot"></div>
-        <div class="xp-body">
-          <div class="xp-header">
-            <span class="xp-title">Freelance Plugin Developer</span>
-            <span class="xp-date">2022 — present</span>
+  <div class="work-grid" id="work-grid">
+    <!-- Cards injected by JS -->
+  </div>
+
+  <footer>
+    <p>© 2025 KeyLymPi · <a onclick="showPage('terms')">Terms</a></p>
+  </footer>
+</div>
+
+<!-- ═══════════════ SKILLS ═══════════════ -->
+<div class="page" id="page-skills">
+  <div class="page-header">
+    <h1>Skills &amp; <span>Experience</span></h1>
+    <p>TODO</p>
+  </div>
+
+  <div class="skills-layout">
+    <div class="skills-section full">
+      <h2>Languages</h2>
+      <div class="lang-grid" id="lang-grid"></div>
+    </div>
+    <div class="skills-section">
+      <h2>Frameworks &amp; Tools</h2>
+      <div class="skill-list" id="frameworks-list"></div>
+    </div>
+    <div class="skills-section">
+      <h2>Specialisms</h2>
+      <div class="skill-list" id="specialisms-list"></div>
+    </div>
+    <div class="skills-section full">
+      <h2>About</h2>
+      <div class="bio-box">
+        <span class="placeholder-text">// Bio coming soon — check back shortly.</span>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 KeyLymPi · <a onclick="showPage('terms')">Terms</a></p>
+  </footer>
+</div>
+
+<!-- ═══════════════ COMMISSION ═══════════════ -->
+<div class="page" id="page-commission">
+  <div class="page-header">
+    <h1>Commission <span>Info</span></h1>
+    <p>TODO</p>
+  </div>
+
+  <div class="commission-layout">
+    <div class="commission-row">
+      <div class="tier-card">
+        <div class="tier-name">Micro</div>
+        <div class="tier-price">$15<span>+</span></div>
+        <p class="tier-desc">Small, well-defined tasks. Script fixes, single-feature additions, quick tools.</p>
+        <ul class="tier-features">
+          <li>Single feature or fix</li>
+          <li>1–3 day turnaround</li>
+          <li>Source code included</li>
+          <li>1 revision round</li>
+        </ul>
+        <a class="btn-outline" onclick="showPage('commission'); document.getElementById('project-type').value='micro'">Get started</a>
+      </div>
+      <div class="tier-card featured">
+        <div class="tier-badge">Popular</div>
+        <div class="tier-name">Project</div>
+        <div class="tier-price">$50<span>+</span></div>
+        <p class="tier-desc">Full features, plugins, bots, web apps. Scoped and quoted before any work begins.</p>
+        <ul class="tier-features">
+          <li>Full custom build</li>
+          <li>Scoped quote upfront</li>
+          <li>Source code + docs</li>
+          <li>Multiple revisions</li>
+          <li>2 weeks post-support</li>
+        </ul>
+        <a class="btn-primary" onclick="document.getElementById('project-type').value='project'; document.getElementById('contact-form').scrollIntoView({behavior:'smooth'})">Get started</a>
+      </div>
+      <div class="tier-card">
+        <div class="tier-name">Retainer</div>
+        <div class="tier-price">Custom</div>
+        <p class="tier-desc">Ongoing development, maintenance, or dedicated hours. Priced by scope.</p>
+        <ul class="tier-features">
+          <li>Dedicated hours/week</li>
+          <li>Priority queue</li>
+          <li>Flexible scope</li>
+          <li>Monthly billing</li>
+          <li>Full source access</li>
+        </ul>
+        <a class="btn-outline" onclick="document.getElementById('project-type').value='retainer'; document.getElementById('contact-form').scrollIntoView({behavior:'smooth'})">Get in touch</a>
+      </div>
+    </div>
+
+    <div class="commission-info">
+      <div class="info-block">
+        <h3>Process</h3>
+        <div class="process-steps">
+          <div class="process-step">
+            <div class="step-num">1</div>
+            <div class="step-text">Send a brief — describe what you need, platform, and any constraints.</div>
           </div>
-          <div class="xp-role">LXPlugins · Self-employed</div>
-          <div class="xp-desc">Commission-based Minecraft plugin development for Paper, Spigot, and Bukkit servers. Built everything from lightweight utility plugins to full custom game modes with persistent data layers, custom UIs, and third-party API integrations.</div>
+          <div class="process-step">
+            <div class="step-num">2</div>
+            <div class="step-text">I'll review and send a quote with scope, timeline, and price.</div>
+          </div>
+          <div class="process-step">
+            <div class="step-num">3</div>
+            <div class="step-text">Deposit paid, work begins. You get updates as it progresses.</div>
+          </div>
+          <div class="process-step">
+            <div class="step-num">4</div>
+            <div class="step-text">Final payment, source delivered, post-support window starts.</div>
+          </div>
         </div>
       </div>
-      <div class="xp-item">
-        <div class="xp-dot"></div>
-        <div class="xp-body">
-          <div class="xp-header">
-            <span class="xp-title">Full-stack Web Development</span>
-            <span class="xp-date">2023 — present</span>
-          </div>
-          <div class="xp-role">Personal projects · Self-taught</div>
-          <div class="xp-desc">Expanded into web development — building REST APIs, dynamic frontends, and database-backed applications. Focus on shipping clean, maintainable code over bloated frameworks.</div>
-        </div>
-      </div>
-      <div class="xp-item">
-        <div class="xp-dot dim"></div>
-        <div class="xp-body">
-          <div class="xp-header">
-            <span class="xp-title">Open Source Contributions</span>
-            <span class="xp-date">2022 — present</span>
-          </div>
-          <div class="xp-role">GitHub · Public repos</div>
-          <div class="xp-desc">Published free plugins and utilities for the Minecraft community. Source-available projects with clean documentation and active issue tracking.</div>
+      <div class="info-block">
+        <h3>Good to know</h3>
+        <div class="skill-list">
+          <div class="skill-row"><span class="skill-name">Payment</span><span class="skill-badge">PayPal / Crypto</span></div>
+          <div class="skill-row"><span class="skill-name">Deposit</span><span class="skill-badge">50% upfront</span></div>
+          <div class="skill-row"><span class="skill-name">Comms</span><span class="skill-badge">Discord / Email</span></div>
+          <div class="skill-row"><span class="skill-name">Revisions</span><span class="skill-badge">Included</span></div>
+          <div class="skill-row"><span class="skill-name">Source code</span><span class="skill-badge">Always delivered</span></div>
+          <div class="skill-row"><span class="skill-name">Refunds</span><span class="skill-badge">Per ToS</span></div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div id="skills" class="section">
-    <div class="section-label">Skills</div>
-    <h2>Tech I work with</h2>
-    <div class="skills-grid">
-      <div class="skill-block">
-        <div class="skill-cat">Plugin dev</div>
-        <div class="skill-items">
-          <div class="skill-item"><span class="skill-name">Java</span><div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div></div>
-          <div class="skill-item"><span class="skill-name">Paper API</span><div class="skill-bar"><div class="skill-fill" style="width:92%"></div></div></div>
-          <div class="skill-item"><span class="skill-name">Spigot / Bukkit</span><div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div></div>
-          <div class="skill-item"><span class="skill-name">MySQL / SQLite</span><div class="skill-bar"><div class="skill-fill" style="width:78%"></div></div></div>
-        </div>
-      </div>
-      <div class="skill-block">
-        <div class="skill-cat">Web backend</div>
-        <div class="skill-items">
-          <div class="skill-item"><span class="skill-name">JavaScript</span><div class="skill-bar"><div class="skill-fill" style="width:82%"></div></div></div>
-          <div class="skill-item"><span class="skill-name">Node.js</span><div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div></div>
-          <div class="skill-item"><span class="skill-name">REST APIs</span><div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div></div>
-          <div class="skill-item"><span class="skill-name">PostgreSQL</span><div class="skill-bar"><div class="skill-fill" style="width:65%"></div></div></div>
-        </div>
-      </div>
-      <div class="skill-block">
-        <div class="skill-cat">Frontend & tools</div>
-        <div class="skill-items">
-          <div class="skill-item"><span class="skill-name">HTML / CSS</span><div class="skill-bar"><div class="skill-fill" style="width:88%"></div></div></div>
-          <div class="skill-item"><span class="skill-name">React</span><div class="skill-bar"><div class="skill-fill" style="width:60%"></div></div></div>
-          <div class="skill-item"><span class="skill-name">Git</span><div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div></div>
-          <div class="skill-item"><span class="skill-name">Linux / CLI</span><div class="skill-bar"><div class="skill-fill" style="width:72%"></div></div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="projects" class="section">
-    <div class="section-label">Projects</div>
-    <h2>Selected work</h2>
-    <div class="project-grid">
-      <div class="project-card">
-        <div class="proj-top">
-          <span class="proj-name">CombatSMP</span>
-          <span class="proj-badge">Plugin</span>
-        </div>
-        <div class="proj-desc">A plugin for a stregnth-adjacent server idea</div>
-        <div class="proj-stack">
-          <span class="proj-tech">Java</span><span class="proj-tech">·</span>
-          <span class="proj-tech">Paper</span><span class="proj-tech">·</span>
-          <span class="proj-tech">MySQL</span>
-        </div>
-      </div>
-      <div class="project-card">
-        <div class="proj-top">
-          <span class="proj-name">ServerDashboard</span>
-          <span class="proj-badge">Web</span>
-        </div>
-        <div class="proj-desc">Real-time server management panel — player stats, plugin config editor, and live console output streamed over WebSockets.</div>
-        <div class="proj-stack">
-          <span class="proj-tech">Node.js</span><span class="proj-tech">·</span>
-          <span class="proj-tech">React</span><span class="proj-tech">·</span>
-          <span class="proj-tech">WebSockets</span>
-        </div>
-      </div>
-      <div class="project-card">
-        <div class="proj-top">
-          <span class="proj-name">TwistedSMP</span>
-          <span class="proj-badge dim">Plugin</span>
-        </div>
-        <div class="proj-desc">A plugin for a custom SMP revolving around different mob twists</div>
-        <div class="proj-stack">
-          <span class="proj-tech">Java</span><span class="proj-tech">·</span>
-          <span class="proj-tech">Spigot</span><span class="proj-tech">·</span>
-          <span class="proj-tech">SQLite</span>
-        </div>
-      </div>
-      <div class="project-card">
-        <div class="proj-top">
-          <span class="proj-name">CommissionSite</span>
-          <span class="proj-badge dim">Open source</span>
-        </div>
-        <div class="proj-desc">Commission intake site with Discord webhook integration, pricing tiers, and order form validation. The site you're probably looking at right now.</div>
-        <div class="proj-stack">
-          <span class="proj-tech">HTML</span><span class="proj-tech">·</span>
-          <span class="proj-tech">CSS</span><span class="proj-tech">·</span>
-          <span class="proj-tech">Vanilla JS</span>
+    <div class="commission-info" id="contact-form">
+      <div class="info-block" style="grid-column:1/-1">
+        <h3>Send a brief</h3>
+        <div class="contact-form">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div class="form-field">
+              <label>Name / Handle</label>
+              <input type="text" placeholder="yourname">
+            </div>
+            <div class="form-field">
+              <label>Contact (Discord / Email)</label>
+              <input type="text" placeholder="user#0000 or email">
+            </div>
+          </div>
+          <div class="form-field">
+            <label>Project Type</label>
+            <select id="project-type">
+              <option value="">Select a tier...</option>
+              <option value="micro">Micro ($15+)</option>
+              <option value="project">Project ($50+)</option>
+              <option value="retainer">Retainer (Custom)</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Platform / Stack</label>
+            <input type="text" placeholder="e.g. Paper 1.21, React + Node, Godot 4...">
+          </div>
+          <div class="form-field">
+            <label>Project brief</label>
+            <textarea placeholder="Describe what you need in as much detail as possible. The more context, the faster I can quote."></textarea>
+          </div>
+          <button class="btn-primary" style="align-self:flex-start;margin-top:4px" onclick="alert('Brief sent! (wire this to your backend)')">Submit brief</button>
         </div>
       </div>
     </div>
   </div>
 
   <footer>
-    <p>© 2026 KeyLymPi. All rights reserved.</p>
-    <p>Built from scratch. No frameworks harmed.</p>
+    <p>© 2025 KeyLymPi · <a onclick="showPage('terms')">Terms of Service</a> · <a href="mailto:pi@keylympi.dev">pi@keylympi.dev</a></p>
   </footer>
-
 </div>
+
+<!-- ═══════════════ TERMS ═══════════════ -->
+<div class="page" id="page-terms">
+  <div class="page-header">
+    <h1>Terms of <span>Service</span></h1>
+    <p>TODO</p>
+  </div>
+
+  <div class="terms-layout">
+    <div class="terms-section">
+      <h2>1. Overview</h2>
+      <p class="terms-placeholder">[ Fill in your overview / introduction here. ]</p>
+    </div>
+    <div class="terms-section">
+      <h2>2. Commissions &amp; Scope</h2>
+      <p class="terms-placeholder">[ Fill in your commission policies — what you do and don't accept, scope changes, etc. ]</p>
+    </div>
+    <div class="terms-section">
+      <h2>3. Payment</h2>
+      <p class="terms-placeholder">[ Fill in your payment terms — deposit %, methods, timing. ]</p>
+    </div>
+    <div class="terms-section">
+      <h2>4. Revisions</h2>
+      <p class="terms-placeholder">[ Fill in revision policy — how many, what counts as a revision, extra charges. ]</p>
+    </div>
+    <div class="terms-section">
+      <h2>5. Refunds</h2>
+      <p class="terms-placeholder">[ Fill in your refund policy. ]</p>
+    </div>
+    <div class="terms-section">
+      <h2>6. Intellectual Property</h2>
+      <p class="terms-placeholder">[ Fill in IP terms — who owns the code, licensing, resale restrictions. ]</p>
+    </div>
+    <div class="terms-section">
+      <h2>7. Confidentiality</h2>
+      <p class="terms-placeholder">[ Fill in any NDA / confidentiality terms. ]</p>
+    </div>
+    <div class="terms-section">
+      <h2>8. Disputes</h2>
+      <p class="terms-placeholder">[ Fill in how disputes are handled. ]</p>
+    </div>
+    <div class="terms-section">
+      <h2>9. Contact</h2>
+      <p>For questions, reach out via <a href="mailto:pi@keylympi.dev" style="color:var(--green)">pi@keylympi.dev</a> or Discord.</p>
+    </div>
+    <div class="terms-last-updated">Last updated: <span id="terms-date"></span></div>
+  </div>
+
+  <footer>
+    <p>© 2025 KeyLymPi · <a href="mailto:pi@keylympi.dev">pi@keylympi.dev</a></p>
+  </footer>
+</div>
+
+<!-- ═══════════════ ADD PROJECT MODAL ═══════════════ -->
+<div class="modal-overlay" id="add-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Add Project</h3>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="form-field">
+      <label>Project Title</label>
+      <input type="text" id="new-title" placeholder="My Project">
+    </div>
+    <div class="form-field">
+      <label>Description</label>
+      <textarea id="new-desc" placeholder="What did you build? What problem does it solve?"></textarea>
+    </div>
+    <div class="form-field">
+      <label>Tags (comma separated)</label>
+      <input type="text" id="new-tags" placeholder="Java, Paper, Plugin">
+    </div>
+    <div class="form-field">
+      <label>Media (image or video)</label>
+      <input type="file" id="new-media" accept="image/*,video/*">
+      <button class="btn-outline" style="margin-top:6px" onclick="document.getElementById('new-media').click()">Choose file</button>
+      <span id="new-media-name" style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-top:4px"></span>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn-primary" onclick="saveProject()">Add project</button>
+      <button class="btn-outline" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── Navigation ──
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    const navEl = document.getElementById('nav-' + id);
+    if (navEl) navEl.classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  // ── Skills data ──
+  const langs = [
+    { name: 'Java', pct: 95 },
+    { name: 'TypeScript', pct: 90 },
+    { name: 'Python', pct: 88 },
+    { name: 'C++', pct: 75 },
+    { name: 'Rust', pct: 65 },
+    { name: 'Kotlin', pct: 70 },
+    { name: 'GDScript', pct: 80 },
+    { name: 'JavaScript', pct: 90 },
+    { name: 'HTML/CSS', pct: 92 },
+    { name: 'Bash', pct: 72 },
+    { name: 'C#', pct: 60 },
+    { name: 'SQL', pct: 78 },
+  ];
+  const frameworks = [
+    { name: 'Paper / Spigot / Fabric', badge: 'MC' },
+    { name: 'React / Next.js', badge: 'Web' },
+    { name: 'Node.js / Express', badge: 'Backend' },
+    { name: 'Tauri', badge: 'Desktop' },
+    { name: 'Godot 4', badge: 'Game' },
+    { name: 'Discord.js v14', badge: 'Bot' },
+    { name: 'Supabase / PostgreSQL', badge: 'DB' },
+    { name: 'Qt6', badge: 'C++' },
+    { name: 'stable-baselines3', badge: 'ML' },
+  ];
+  const specialisms = [
+    { name: 'Minecraft Plugin Dev', badge: 'Expert' },
+    { name: 'Full-Stack Web Apps', badge: 'Expert' },
+    { name: 'Game Development', badge: 'Advanced' },
+    { name: 'Discord Bots', badge: 'Expert' },
+    { name: 'Desktop Apps', badge: 'Advanced' },
+    { name: 'Embedded / Hardware', badge: 'Intermediate' },
+    { name: 'Reverse Engineering', badge: 'Intermediate' },
+    { name: 'DevOps / Linux', badge: 'Advanced' },
+  ];
+
+  function buildSkills() {
+    const langGrid = document.getElementById('lang-grid');
+    langs.forEach(l => {
+      langGrid.innerHTML += `
+        <div class="lang-item">
+          <div class="lang-name">${l.name}</div>
+          <div class="lang-bar-track"><div class="lang-bar-fill" style="width:${l.pct}%"></div></div>
+        </div>`;
+    });
+    const fw = document.getElementById('frameworks-list');
+    frameworks.forEach(f => {
+      fw.innerHTML += `<div class="skill-row"><span class="skill-name">${f.name}</span><span class="skill-badge">${f.badge}</span></div>`;
+    });
+    const sp = document.getElementById('specialisms-list');
+    specialisms.forEach(s => {
+      sp.innerHTML += `<div class="skill-row"><span class="skill-name">${s.name}</span><span class="skill-badge">${s.badge}</span></div>`;
+    });
+  }
+
+  // ── Work / Portfolio ──
+  let projects = [
+    {
+      title: 'KitPvP Plugin',
+      desc: 'Full Paper 1.21 KitPvP plugin — 9 kits, ELO matchmaking, duels, teams, custom scoreboard.',
+      tags: ['Java', 'Paper', 'Plugin'],
+      media: null, type: null
+    },
+    {
+      title: 'FlaresRoyale Discord Bot',
+      desc: 'Discord.js v14 bot with ticket system, giveaways, moderation, automod, and server stat panels.',
+      tags: ['TypeScript', 'Discord.js', 'Bot'],
+      media: null, type: null
+    },
+    {
+      title: 'OpenOrder Platform',
+      desc: 'Open-source multi-tenant ordering platform. TypeScript monorepo, Supabase, Cloudflare subdomains, Tauri POS.',
+      tags: ['TypeScript', 'React', 'Supabase'],
+      media: null, type: null
+    },
+    {
+      title: 'Sticky Situation',
+      desc: 'Original 3D local multiplayer game in Godot 4. 2–8 players, blob characters, custom vertex deformation.',
+      tags: ['Godot 4', 'GDScript', 'Game'],
+      media: null, type: null
+    },
+  ];
+
+  function renderWorkGrid() {
+    const grid = document.getElementById('work-grid');
+    grid.innerHTML = '';
+    projects.forEach((p, i) => {
+      grid.innerHTML += `
+        <div class="work-card">
+          <div class="work-card-media">
+            ${p.media
+              ? (p.type === 'video'
+                  ? `<video src="${p.media}" controls muted playsinline></video>`
+                  : `<img src="${p.media}" alt="${p.title}">`)
+              : `<div class="media-placeholder">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                  <span>No preview</span>
+                </div>`}
+            <button class="upload-btn" onclick="triggerUpload(${i})">+ media</button>
+            <input type="file" id="upload-${i}" accept="image/*,video/*" onchange="handleUpload(event,${i})">
+          </div>
+          <div class="work-card-tags">
+            ${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+          </div>
+          <h3>${p.title}</h3>
+          <p>${p.desc}</p>
+        </div>`;
+    });
+    // Add project card
+    grid.innerHTML += `
+      <div class="add-project-card" onclick="openModal()">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+        <span>Add project</span>
+      </div>`;
+  }
+
+  function triggerUpload(i) {
+    document.getElementById('upload-' + i).click();
+  }
+
+  function handleUpload(e, i) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    projects[i].media = url;
+    projects[i].type = file.type.startsWith('video') ? 'video' : 'image';
+    renderWorkGrid();
+  }
+
+  // ── Add Project Modal ──
+  function openModal() {
+    document.getElementById('add-modal').classList.add('open');
+  }
+  function closeModal() {
+    document.getElementById('add-modal').classList.remove('open');
+    document.getElementById('new-title').value = '';
+    document.getElementById('new-desc').value = '';
+    document.getElementById('new-tags').value = '';
+    document.getElementById('new-media-name').textContent = '';
+  }
+
+  document.getElementById('new-media').addEventListener('change', function() {
+    document.getElementById('new-media-name').textContent = this.files[0]?.name || '';
+  });
+
+  let pendingMedia = null;
+  document.getElementById('new-media').addEventListener('change', function() {
+    const file = this.files[0];
+    if (!file) return;
+    pendingMedia = { url: URL.createObjectURL(file), type: file.type.startsWith('video') ? 'video' : 'image' };
+    document.getElementById('new-media-name').textContent = file.name;
+  });
+
+  function saveProject() {
+    const title = document.getElementById('new-title').value.trim();
+    const desc = document.getElementById('new-desc').value.trim();
+    const tags = document.getElementById('new-tags').value.split(',').map(t => t.trim()).filter(Boolean);
+    if (!title) return;
+    projects.push({
+      title, desc: desc || 'No description.',
+      tags: tags.length ? tags : ['Custom'],
+      media: pendingMedia?.url || null,
+      type: pendingMedia?.type || null
+    });
+    pendingMedia = null;
+    renderWorkGrid();
+    closeModal();
+  }
+
+  // ── Terms date ──
+  document.getElementById('terms-date').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+  // ── Init ──
+  buildSkills();
+  renderWorkGrid();
+</script>
 </body>
 </html>
