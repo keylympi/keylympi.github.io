@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KeyLymPi - A guy who codes things</title>
+<title>KeyLymPi.dev — Custom Software Development</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -1115,20 +1115,20 @@
     <div class="commission-info" id="contact-form">
       <div class="info-block" style="grid-column:1/-1">
         <h3>Send a brief</h3>
-        <div class="contact-form">
+        <div class="contact-form" id="brief-form">
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
             <div class="form-field">
               <label>Name / Handle</label>
-              <input type="text" placeholder="yourname">
+              <input type="text" id="f-name" name="name" placeholder="yourname" required>
             </div>
             <div class="form-field">
               <label>Contact (Discord / Email)</label>
-              <input type="text" placeholder="user#0000 or email">
+              <input type="text" id="f-contact" name="contact" placeholder="user#0000 or email" required>
             </div>
           </div>
           <div class="form-field">
             <label>Project Type</label>
-            <select id="project-type">
+            <select id="project-type" name="project_type">
               <option value="">Select a tier...</option>
               <option value="micro">Micro ($15+)</option>
               <option value="project">Project ($50+)</option>
@@ -1137,13 +1137,14 @@
           </div>
           <div class="form-field">
             <label>Platform / Stack</label>
-            <input type="text" placeholder="e.g. Paper 1.21, React + Node, Godot 4...">
+            <input type="text" id="f-stack" name="stack" placeholder="e.g. Paper 1.21, React + Node, Godot 4...">
           </div>
           <div class="form-field">
             <label>Project brief</label>
-            <textarea placeholder="Describe what you need in as much detail as possible. The more context, the faster I can quote."></textarea>
+            <textarea id="f-brief" name="brief" placeholder="Describe what you need in as much detail as possible. The more context, the faster I can quote." required></textarea>
           </div>
-          <button class="btn-primary" style="align-self:flex-start;margin-top:4px" onclick="alert('Brief sent! (wire this to your backend)')">Submit brief</button>
+          <div id="form-status" style="font-family:var(--mono);font-size:12px;display:none;padding:8px 12px;border-radius:4px;"></div>
+          <button class="btn-primary" id="submit-btn" style="align-self:flex-start;margin-top:4px" onclick="submitBrief()">Submit brief</button>
         </div>
       </div>
     </div>
@@ -1239,6 +1240,101 @@
 </div>
 
 <script>
+  // ── Rate limit config ──
+  const RATE_LIMIT_DAYS = 30;
+  const RATE_LIMIT_KEY = 'klp_brief_submitted';
+  const RATE_LIMIT_MSG = "You've already submitted a brief this month — I'll be in touch soon. If it's urgent, reach out on Discord directly.";
+
+  function checkRateLimit() {
+    const stored = localStorage.getItem(RATE_LIMIT_KEY);
+    if (!stored) return false;
+    const { year, month, day } = JSON.parse(stored);
+    const submitted = new Date(year, month - 1, day);
+    const now = new Date();
+    const diffDays = (now - submitted) / (1000 * 60 * 60 * 24);
+    if (diffDays >= RATE_LIMIT_DAYS) {
+      localStorage.removeItem(RATE_LIMIT_KEY);
+      return false;
+    }
+    return true;
+  }
+
+  function stampRateLimit() {
+    const now = new Date();
+    localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify({
+      year: now.getFullYear(),
+      month: now.getMonth() + 1,
+      day: now.getDate(),
+    }));
+  }
+
+  // Run on load — clears expired stamps
+  checkRateLimit();
+
+  // ── Formspree brief submission ──
+  async function submitBrief() {
+    const btn = document.getElementById('submit-btn');
+    const status = document.getElementById('form-status');
+    const data = {
+      name: document.getElementById('f-name').value.trim(),
+      contact: document.getElementById('f-contact').value.trim(),
+      project_type: document.getElementById('project-type').value,
+      stack: document.getElementById('f-stack').value.trim(),
+      brief: document.getElementById('f-brief').value.trim(),
+    };
+    if (checkRateLimit()) {
+      status.style.display = 'block';
+      status.style.color = 'var(--text2)';
+      status.style.background = 'var(--bg3)';
+      status.style.border = '1px solid var(--border2)';
+      status.textContent = RATE_LIMIT_MSG;
+      return;
+    }
+    if (!data.name || !data.contact || !data.brief) {
+      status.style.display = 'block';
+      status.style.color = 'var(--text)';
+      status.style.background = 'var(--bg3)';
+      status.style.border = '1px solid var(--border2)';
+      status.textContent = '⚠ Please fill in name, contact, and brief.';
+      return;
+    }
+    btn.textContent = 'Sending...';
+    btn.style.opacity = '0.6';
+    btn.style.pointerEvents = 'none';
+    try {
+      const res = await fetch('https://formspree.io/f/mpqeydbz', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (res.ok) {
+        status.style.display = 'block';
+        status.style.color = 'var(--green)';
+        status.style.background = 'var(--green-glow)';
+        status.style.border = '1px solid var(--green-dim)';
+        status.textContent = '✓ Brief sent — I\'ll be in touch soon.';
+        stampRateLimit();
+        document.getElementById('f-name').value = '';
+        document.getElementById('f-contact').value = '';
+        document.getElementById('project-type').value = '';
+        document.getElementById('f-stack').value = '';
+        document.getElementById('f-brief').value = '';
+        btn.textContent = 'Sent';
+      } else {
+        throw new Error();
+      }
+    } catch {
+      status.style.display = 'block';
+      status.style.color = '#ff6b6b';
+      status.style.background = 'var(--bg3)';
+      status.style.border = '1px solid #4a1b1b';
+      status.textContent = '✕ Something went wrong — try emailing directly.';
+      btn.textContent = 'Submit brief';
+      btn.style.opacity = '1';
+      btn.style.pointerEvents = 'auto';
+    }
+  }
+
   // ── Navigation ──
   function showPage(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
