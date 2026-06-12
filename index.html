@@ -974,7 +974,7 @@
   </div>
 
   <footer>
-    <p>© 2026 KeyLymPi · v1.5 · <a onclick="showPage('terms')">Terms of Service</a> · <a href="mailto:pi@keylympi.dev">pi@keylympi.dev</a></p>
+    <p>© 2026 KeyLymPi · v1.6 · <a onclick="showPage('terms')">Terms of Service</a> · <a href="mailto:pi@keylympi.dev">pi@keylympi.dev</a></p>
   </footer>
 </div>
 
@@ -1071,7 +1071,7 @@
   </div>
 
   <footer>
-    <p>© 2026 KeyLymPi · v1.5 · <a onclick="showPage('terms')">Terms</a></p>
+    <p>© 2026 KeyLymPi · v1.6 · <a onclick="showPage('terms')">Terms</a></p>
   </footer>
 </div>
 
@@ -1104,7 +1104,7 @@
   </div>
 
   <footer>
-    <p>© 2026 KeyLymPi · v1.5 · <a onclick="showPage('terms')">Terms</a></p>
+    <p>© 2026 KeyLymPi · v1.6 · <a onclick="showPage('terms')">Terms</a></p>
   </footer>
 </div>
 
@@ -1196,43 +1196,49 @@
     <div class="commission-info" id="contact-form">
       <div class="info-block" style="grid-column:1/-1">
         <h3>Send a brief</h3>
-        <div class="contact-form" id="brief-form">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-            <div class="form-field">
-              <label>Name / Handle</label>
-              <input type="text" id="f-name" name="name" placeholder="yourname" required>
+        <div class="contact-form">
+          <div data-fs-success style="display:none;font-family:var(--mono);font-size:12px;color:var(--green);background:var(--green-glow);border:1px solid var(--green-dim);padding:8px 12px;border-radius:4px;">✓ Brief sent — I'll be in touch soon.</div>
+          <div data-fs-error style="display:none;font-family:var(--mono);font-size:12px;color:#ff6b6b;background:var(--bg3);border:1px solid #4a1b1b;padding:8px 12px;border-radius:4px;"></div>
+          <form id="brief-form">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+              <div class="form-field">
+                <label>Name / Handle</label>
+                <input type="text" name="name" placeholder="yourname" required data-fs-field>
+                <span data-fs-error="name" style="font-family:var(--mono);font-size:11px;color:#ff6b6b;"></span>
+              </div>
+              <div class="form-field">
+                <label>Contact (Discord / Email)</label>
+                <input type="text" name="contact" placeholder="discorduser or email" required data-fs-field>
+                <span data-fs-error="contact" style="font-family:var(--mono);font-size:11px;color:#ff6b6b;"></span>
+              </div>
             </div>
             <div class="form-field">
-              <label>Contact (Discord / Email)</label>
-              <input type="text" id="f-contact" name="contact" placeholder="discorduser or email" required>
+              <label>Project Type</label>
+              <select id="project-type" name="project_type" data-fs-field>
+                <option value="">Select a tier...</option>
+                <option value="micro">Micro ($15+)</option>
+                <option value="project">Project ($50+)</option>
+                <option value="retainer">Retainer (Custom)</option>
+              </select>
             </div>
-          </div>
-          <div class="form-field">
-            <label>Project Type</label>
-            <select id="project-type" name="project_type">
-              <option value="">Select a tier...</option>
-              <option value="micro">Micro ($15+)</option>
-              <option value="project">Project ($50+)</option>
-              <option value="retainer">Retainer (Custom)</option>
-            </select>
-          </div>
-          <div class="form-field">
-            <label>Platform / Stack</label>
-            <input type="text" id="f-stack" name="stack" placeholder="e.g. Paper 1.21, React + Node, Godot 4...">
-          </div>
-          <div class="form-field">
-            <label>Project brief</label>
-            <textarea id="f-brief" name="brief" placeholder="Describe what you need in as much detail as possible. The more context, the faster I can quote." required></textarea>
-          </div>
-          <div id="form-status" style="font-family:var(--mono);font-size:12px;display:none;padding:8px 12px;border-radius:4px;"></div>
-          <button class="btn-primary" id="submit-btn" style="align-self:flex-start;margin-top:4px" onclick="submitBrief()">Submit brief →</button>
+            <div class="form-field">
+              <label>Platform / Stack</label>
+              <input type="text" name="stack" placeholder="e.g. Paper 1.21, React + Node, Godot 4..." data-fs-field>
+            </div>
+            <div class="form-field">
+              <label>Project brief</label>
+              <textarea name="brief" placeholder="Describe what you need in as much detail as possible. The more context, the faster I can quote." required data-fs-field></textarea>
+              <span data-fs-error="brief" style="font-family:var(--mono);font-size:11px;color:#ff6b6b;"></span>
+            </div>
+            <button type="submit" class="btn-primary" id="submit-btn" style="align-self:flex-start;margin-top:10px" data-fs-submit-btn>Submit brief →</button>
+          </form>
         </div>
       </div>
     </div>
   </div>
 
   <footer>
-    <p>© 2026 KeyLymPi · v1.5 · <a onclick="showPage('terms')">Terms of Service</a> · <a href="mailto:pi@keylympi.dev">pi@keylympi.dev</a></p>
+    <p>© 2026 KeyLymPi · v1.6 · <a onclick="showPage('terms')">Terms of Service</a> · <a href="mailto:pi@keylympi.dev">pi@keylympi.dev</a></p>
   </footer>
 </div>
 
@@ -1284,13 +1290,17 @@
   </div>
 
   <footer>
-    <p>© 2026 KeyLymPi · v1.5 · <a href="mailto:pi@keylympi.dev">pi@keylympi.dev</a></p>
+    <p>© 2026 KeyLymPi · v1.6 · <a href="mailto:pi@keylympi.dev">pi@keylympi.dev</a></p>
   </footer>
 </div>
 
 
 <script>
-  // ── Rate limit config ──
+  // ── Formspree Ajax ──
+  window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
+  formspree('initForm', { formElement: '#brief-form', formId: 'mpqeydbz' });
+
+  // ── Rate limit ──
   const RATE_LIMIT_DAYS = 30;
   const RATE_LIMIT_KEY = 'klp_brief_submitted';
   const RATE_LIMIT_MSG = "You've already submitted a brief this month — I'll be in touch soon. If it's urgent, reach out on Discord directly.";
@@ -1302,88 +1312,28 @@
     const submitted = new Date(year, month - 1, day);
     const now = new Date();
     const diffDays = (now - submitted) / (1000 * 60 * 60 * 24);
-    if (diffDays >= RATE_LIMIT_DAYS) {
-      localStorage.removeItem(RATE_LIMIT_KEY);
-      return false;
-    }
+    if (diffDays >= RATE_LIMIT_DAYS) { localStorage.removeItem(RATE_LIMIT_KEY); return false; }
     return true;
   }
-
-  function stampRateLimit() {
-    const now = new Date();
-    localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify({
-      year: now.getFullYear(),
-      month: now.getMonth() + 1,
-      day: now.getDate(),
-    }));
-  }
-
-  // Run on load — clears expired stamps
   checkRateLimit();
 
-  // ── Formspree brief submission ──
-  async function submitBrief() {
-    const btn = document.getElementById('submit-btn');
-    const status = document.getElementById('form-status');
-    const data = {
-      name: document.getElementById('f-name').value.trim(),
-      contact: document.getElementById('f-contact').value.trim(),
-      project_type: document.getElementById('project-type').value,
-      stack: document.getElementById('f-stack').value.trim(),
-      brief: document.getElementById('f-brief').value.trim(),
-    };
+  document.getElementById('brief-form').addEventListener('submit', function(e) {
     if (checkRateLimit()) {
-      status.style.display = 'block';
-      status.style.color = 'var(--text2)';
-      status.style.background = 'var(--bg3)';
-      status.style.border = '1px solid var(--border2)';
-      status.textContent = RATE_LIMIT_MSG;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      const err = document.querySelector('[data-fs-error]');
+      if (err) { err.style.display = 'block'; err.textContent = RATE_LIMIT_MSG; }
       return;
     }
-    if (!data.name || !data.contact || !data.brief) {
-      status.style.display = 'block';
-      status.style.color = 'var(--text)';
-      status.style.background = 'var(--bg3)';
-      status.style.border = '1px solid var(--border2)';
-      status.textContent = '⚠ Please fill in name, contact, and brief.';
-      return;
-    }
-    btn.textContent = 'Sending...';
-    btn.style.opacity = '0.6';
-    btn.style.pointerEvents = 'none';
-    try {
-      const res = await fetch('https://formspree.io/f/mpqeydbz', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(data),
-      });
-      if (res.ok) {
-        status.style.display = 'block';
-        status.style.color = 'var(--green)';
-        status.style.background = 'var(--green-glow)';
-        status.style.border = '1px solid var(--green-dim)';
-        status.textContent = '✓ Brief sent — I\'ll be in touch soon.';
-        stampRateLimit();
-        document.getElementById('f-name').value = '';
-        document.getElementById('f-contact').value = '';
-        document.getElementById('project-type').value = '';
-        document.getElementById('f-stack').value = '';
-        document.getElementById('f-brief').value = '';
-        btn.textContent = 'Brief sent ✓';
-      } else {
-        throw new Error();
+    // Stamp on next tick after formspree handles success
+    setTimeout(() => {
+      const success = document.querySelector('[data-fs-success]');
+      if (success && success.style.display !== 'none') {
+        const now = new Date();
+        localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify({ year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() }));
       }
-    } catch {
-      status.style.display = 'block';
-      status.style.color = '#ff6b6b';
-      status.style.background = 'var(--bg3)';
-      status.style.border = '1px solid #4a1b1b';
-      status.textContent = '✕ Something went wrong — try emailing directly.';
-      btn.textContent = 'Submit brief';
-      btn.style.opacity = '1';
-      btn.style.pointerEvents = 'auto';
-    }
-  }
+    }, 1500);
+  });
 
   // ── Navigation ──
   function showPage(id) {
@@ -1457,5 +1407,6 @@
   // ── Init ──
   buildSkills();
 </script>
+<script src="https://unpkg.com/@formspree/ajax@1" defer></script>
 </body>
 </html>
