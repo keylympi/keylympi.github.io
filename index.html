@@ -865,6 +865,34 @@
     .stats-row { gap: 2rem; }
     .scroll-grid { flex-direction: column; }
   }
+  /* ── Toast popup ── */
+  .toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 999;
+    font-family: var(--mono);
+    font-size: 13px;
+    padding: 12px 20px;
+    border-radius: 6px;
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    pointer-events: none;
+    animation: toastIn 0.25s cubic-bezier(0.34,1.56,0.64,1) forwards;
+  }
+  .toast.out { animation: toastOut 0.2s ease-in forwards; }
+  .toast.success { color: var(--green); background: #0a1a0f; border-color: var(--green-dim); }
+  .toast.error   { color: #ff8080; background: #1a0a0a; border-color: #4a1b1b; }
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateY(16px) scale(0.95); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes toastOut {
+    from { opacity: 1; transform: translateY(0) scale(1); }
+    to   { opacity: 0; transform: translateY(8px) scale(0.97); }
+  }
 </style>
 </head>
 <body>
@@ -974,7 +1002,7 @@
   </div>
 
   <footer>
-    <p>© 2026 KeyLymPi · v1.6 · <a onclick="showPage('terms')">Terms of Service</a> · <a href="mailto:pi@keylympi.dev">pi@keylympi.dev</a></p>
+    <p>© 2026 KeyLymPi · v1.7 · <a onclick="showPage('terms')">Terms of Service</a> · <a href="mailto:pi@keylympi.dev">pi@keylympi.dev</a></p>
   </footer>
 </div>
 
@@ -1071,7 +1099,7 @@
   </div>
 
   <footer>
-    <p>© 2026 KeyLymPi · v1.6 · <a onclick="showPage('terms')">Terms</a></p>
+    <p>© 2026 KeyLymPi · v1.7 · <a onclick="showPage('terms')">Terms</a></p>
   </footer>
 </div>
 
@@ -1104,7 +1132,7 @@
   </div>
 
   <footer>
-    <p>© 2026 KeyLymPi · v1.6 · <a onclick="showPage('terms')">Terms</a></p>
+    <p>© 2026 KeyLymPi · v1.7 · <a onclick="showPage('terms')">Terms</a></p>
   </footer>
 </div>
 
@@ -1238,7 +1266,7 @@
   </div>
 
   <footer>
-    <p>© 2026 KeyLymPi · v1.6 · <a onclick="showPage('terms')">Terms of Service</a> · <a href="mailto:pi@keylympi.dev">pi@keylympi.dev</a></p>
+    <p>© 2026 KeyLymPi · v1.7 · <a onclick="showPage('terms')">Terms of Service</a> · <a href="mailto:pi@keylympi.dev">pi@keylympi.dev</a></p>
   </footer>
 </div>
 
@@ -1290,12 +1318,24 @@
   </div>
 
   <footer>
-    <p>© 2026 KeyLymPi · v1.6 · <a href="mailto:pi@keylympi.dev">pi@keylympi.dev</a></p>
+    <p>© 2026 KeyLymPi · v1.7 · <a href="mailto:pi@keylympi.dev">pi@keylympi.dev</a></p>
   </footer>
 </div>
 
 
 <script>
+  // ── Toast ──
+  function showToast(msg, type = 'success') {
+    const t = document.createElement('div');
+    t.className = `toast ${type}`;
+    t.innerHTML = `<span>${type === 'success' ? '✓' : '✕'}</span>${msg}`;
+    document.body.appendChild(t);
+    setTimeout(() => {
+      t.classList.add('out');
+      t.addEventListener('animationend', () => t.remove());
+    }, 3500);
+  }
+
   // ── Formspree Ajax ──
   window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
   formspree('initForm', { formElement: '#brief-form', formId: 'mpqeydbz' });
@@ -1310,30 +1350,49 @@
     if (!stored) return false;
     const { year, month, day } = JSON.parse(stored);
     const submitted = new Date(year, month - 1, day);
-    const now = new Date();
-    const diffDays = (now - submitted) / (1000 * 60 * 60 * 24);
+    const diffDays = (new Date() - submitted) / (1000 * 60 * 60 * 24);
     if (diffDays >= RATE_LIMIT_DAYS) { localStorage.removeItem(RATE_LIMIT_KEY); return false; }
     return true;
   }
+
+  function stampRateLimit() {
+    const now = new Date();
+    localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify({ year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() }));
+  }
+
   checkRateLimit();
 
+  // Block submit if rate limited
   document.getElementById('brief-form').addEventListener('submit', function(e) {
     if (checkRateLimit()) {
       e.preventDefault();
       e.stopImmediatePropagation();
-      const err = document.querySelector('[data-fs-error]');
-      if (err) { err.style.display = 'block'; err.textContent = RATE_LIMIT_MSG; }
-      return;
+      const errBox = document.querySelector('[data-fs-error]');
+      if (errBox) { errBox.style.display = 'block'; errBox.textContent = RATE_LIMIT_MSG; }
+      showToast(RATE_LIMIT_MSG, 'error');
+      return false;
     }
-    // Stamp on next tick after formspree handles success
-    setTimeout(() => {
-      const success = document.querySelector('[data-fs-success]');
-      if (success && success.style.display !== 'none') {
-        const now = new Date();
-        localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify({ year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() }));
+  }, true); // capture phase so it fires before formspree
+
+  // Stamp on success by watching the success element become visible
+  const successEl = document.querySelector('[data-fs-success]');
+  if (successEl) {
+    new MutationObserver(() => {
+      if (successEl.style.display !== 'none' && !localStorage.getItem(RATE_LIMIT_KEY)) {
+        stampRateLimit();
+        showToast("Brief sent — I'll be in touch soon.", 'success');
       }
-    }, 1500);
-  });
+    }).observe(successEl, { attributes: true, attributeFilter: ['style'] });
+  }
+
+  const errorEl = document.querySelector('[data-fs-error]');
+  if (errorEl) {
+    new MutationObserver(() => {
+      if (errorEl.style.display !== 'none' && errorEl.textContent && errorEl.textContent !== RATE_LIMIT_MSG) {
+        showToast('Something went wrong — try emailing directly.', 'error');
+      }
+    }).observe(errorEl, { attributes: true, childList: true, attributeFilter: ['style'] });
+  }
 
   // ── Navigation ──
   function showPage(id) {
