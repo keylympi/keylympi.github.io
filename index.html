@@ -1002,7 +1002,7 @@
   </div>
 
   <footer>
-    <p>© 2026 KeyLymPi · v1.7 · <a onclick="showPage('terms')">Terms of Service</a> · <a href="mailto:pi@keylympi.dev">pi@keylympi.dev</a></p>
+    <p>© 2026 KeyLymPi · v1.8 · <a onclick="showPage('terms')">Terms of Service</a> · <a href="mailto:pi@keylympi.dev">pi@keylympi.dev</a></p>
   </footer>
 </div>
 
@@ -1099,7 +1099,7 @@
   </div>
 
   <footer>
-    <p>© 2026 KeyLymPi · v1.7 · <a onclick="showPage('terms')">Terms</a></p>
+    <p>© 2026 KeyLymPi · v1.8 · <a onclick="showPage('terms')">Terms</a></p>
   </footer>
 </div>
 
@@ -1132,7 +1132,7 @@
   </div>
 
   <footer>
-    <p>© 2026 KeyLymPi · v1.7 · <a onclick="showPage('terms')">Terms</a></p>
+    <p>© 2026 KeyLymPi · v1.8 · <a onclick="showPage('terms')">Terms</a></p>
   </footer>
 </div>
 
@@ -1225,24 +1225,20 @@
       <div class="info-block" style="grid-column:1/-1">
         <h3>Send a brief</h3>
         <div class="contact-form">
-          <div data-fs-success style="display:none;font-family:var(--mono);font-size:12px;color:var(--green);background:var(--green-glow);border:1px solid var(--green-dim);padding:8px 12px;border-radius:4px;">✓ Brief sent — I'll be in touch soon.</div>
-          <div data-fs-error style="display:none;font-family:var(--mono);font-size:12px;color:#ff6b6b;background:var(--bg3);border:1px solid #4a1b1b;padding:8px 12px;border-radius:4px;"></div>
           <form id="brief-form">
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
               <div class="form-field">
                 <label>Name / Handle</label>
-                <input type="text" name="name" placeholder="yourname" required data-fs-field>
-                <span data-fs-error="name" style="font-family:var(--mono);font-size:11px;color:#ff6b6b;"></span>
+                <input type="text" name="name" placeholder="yourname" required>
               </div>
               <div class="form-field">
                 <label>Contact (Discord / Email)</label>
-                <input type="text" name="contact" placeholder="discorduser or email" required data-fs-field>
-                <span data-fs-error="contact" style="font-family:var(--mono);font-size:11px;color:#ff6b6b;"></span>
+                <input type="text" name="contact" placeholder="discorduser or email" required>
               </div>
             </div>
             <div class="form-field">
               <label>Project Type</label>
-              <select id="project-type" name="project_type" data-fs-field>
+              <select id="project-type" name="project_type">
                 <option value="">Select a tier...</option>
                 <option value="micro">Micro ($15+)</option>
                 <option value="project">Project ($50+)</option>
@@ -1251,14 +1247,17 @@
             </div>
             <div class="form-field">
               <label>Platform / Stack</label>
-              <input type="text" name="stack" placeholder="e.g. Paper 1.21, React + Node, Godot 4..." data-fs-field>
+              <input type="text" name="stack" placeholder="e.g. Paper 1.21, React + Node, Godot 4...">
             </div>
             <div class="form-field">
               <label>Project brief</label>
-              <textarea name="brief" placeholder="Describe what you need in as much detail as possible. The more context, the faster I can quote." required data-fs-field></textarea>
-              <span data-fs-error="brief" style="font-family:var(--mono);font-size:11px;color:#ff6b6b;"></span>
+              <textarea name="brief" placeholder="Describe what you need in as much detail as possible. The more context, the faster I can quote." required></textarea>
             </div>
-            <button type="submit" class="btn-primary" id="submit-btn" style="align-self:flex-start;margin-top:10px" data-fs-submit-btn>Submit brief →</button>
+            <!-- Turnstile: only rendered when rate limit is hit -->
+            <div id="turnstile-wrap" style="display:none;margin-top:8px">
+              <div class="cf-turnstile" data-sitekey="0x4AAAAAADjoqBueydmWkrCW" data-theme="dark" data-callback="onTurnstileSuccess" data-error-callback="onTurnstileError"></div>
+            </div>
+            <button type="submit" class="btn-primary" id="submit-btn" style="align-self:flex-start;margin-top:10px">Submit brief →</button>
           </form>
         </div>
       </div>
@@ -1266,7 +1265,7 @@
   </div>
 
   <footer>
-    <p>© 2026 KeyLymPi · v1.7 · <a onclick="showPage('terms')">Terms of Service</a> · <a href="mailto:pi@keylympi.dev">pi@keylympi.dev</a></p>
+    <p>© 2026 KeyLymPi · v1.8 · <a onclick="showPage('terms')">Terms of Service</a> · <a href="mailto:pi@keylympi.dev">pi@keylympi.dev</a></p>
   </footer>
 </div>
 
@@ -1318,7 +1317,7 @@
   </div>
 
   <footer>
-    <p>© 2026 KeyLymPi · v1.7 · <a href="mailto:pi@keylympi.dev">pi@keylympi.dev</a></p>
+    <p>© 2026 KeyLymPi · v1.8 · <a href="mailto:pi@keylympi.dev">pi@keylympi.dev</a></p>
   </footer>
 </div>
 
@@ -1336,9 +1335,22 @@
     }, 3500);
   }
 
-  // ── Formspree Ajax ──
-  window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
-  formspree('initForm', { formElement: '#brief-form', formId: 'mpqeydbz' });
+  // ── Turnstile ──
+  let turnstileToken = null;
+  let turnstilePassed = false;
+
+  function onTurnstileSuccess(token) {
+    turnstileToken = token;
+    turnstilePassed = true;
+    // Auto-proceed with submission after passing
+    document.getElementById('brief-form').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+  }
+
+  function onTurnstileError() {
+    showToast('Captcha failed — please try again.', 'error');
+    turnstilePassed = false;
+    turnstileToken = null;
+  }
 
   // ── Rate limit ──
   const RATE_LIMIT_DAYS = 30;
@@ -1349,50 +1361,75 @@
     const stored = localStorage.getItem(RATE_LIMIT_KEY);
     if (!stored) return false;
     const { year, month, day } = JSON.parse(stored);
-    const submitted = new Date(year, month - 1, day);
-    const diffDays = (new Date() - submitted) / (1000 * 60 * 60 * 24);
+    const diffDays = (new Date() - new Date(year, month - 1, day)) / 86400000;
     if (diffDays >= RATE_LIMIT_DAYS) { localStorage.removeItem(RATE_LIMIT_KEY); return false; }
     return true;
   }
 
   function stampRateLimit() {
-    const now = new Date();
-    localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify({ year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate() }));
+    const n = new Date();
+    localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify({ year: n.getFullYear(), month: n.getMonth() + 1, day: n.getDate() }));
   }
 
-  checkRateLimit();
+  // ── Form submit ──
+  document.getElementById('brief-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
 
-  // Block submit if rate limited
-  document.getElementById('brief-form').addEventListener('submit', function(e) {
     if (checkRateLimit()) {
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      const errBox = document.querySelector('[data-fs-error]');
-      if (errBox) { errBox.style.display = 'block'; errBox.textContent = RATE_LIMIT_MSG; }
-      showToast(RATE_LIMIT_MSG, 'error');
-      return false;
+      if (!turnstilePassed) {
+        // Show the Turnstile widget and wait for the user to pass it
+        const wrap = document.getElementById('turnstile-wrap');
+        wrap.style.display = 'block';
+        wrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        showToast("You've submitted recently — complete the captcha to continue.", 'error');
+        return;
+      }
+      // Passed Turnstile — clear the rate limit and allow this submission
+      localStorage.removeItem(RATE_LIMIT_KEY);
+      turnstilePassed = false;
+      turnstileToken = null;
+      document.getElementById('turnstile-wrap').style.display = 'none';
     }
-  }, true); // capture phase so it fires before formspree
 
-  // Stamp on success by watching the success element become visible
-  const successEl = document.querySelector('[data-fs-success]');
-  if (successEl) {
-    new MutationObserver(() => {
-      if (successEl.style.display !== 'none' && !localStorage.getItem(RATE_LIMIT_KEY)) {
+    const btn = document.getElementById('submit-btn');
+    const name    = this.querySelector('[name="name"]').value.trim();
+    const contact = this.querySelector('[name="contact"]').value.trim();
+    const brief   = this.querySelector('[name="brief"]').value.trim();
+
+    if (!name || !contact || !brief) {
+      showToast('Please fill in name, contact, and brief.', 'error');
+      return;
+    }
+
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch('https://formspree.io/f/mpqeydbz', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          name,
+          contact,
+          project_type: this.querySelector('[name="project_type"]').value,
+          stack: this.querySelector('[name="stack"]').value.trim(),
+          brief,
+        }),
+      });
+      if (res.ok) {
         stampRateLimit();
         showToast("Brief sent — I'll be in touch soon.", 'success');
+        this.reset();
+        btn.textContent = 'Brief sent ✓';
+      } else {
+        throw new Error();
       }
-    }).observe(successEl, { attributes: true, attributeFilter: ['style'] });
-  }
-
-  const errorEl = document.querySelector('[data-fs-error]');
-  if (errorEl) {
-    new MutationObserver(() => {
-      if (errorEl.style.display !== 'none' && errorEl.textContent && errorEl.textContent !== RATE_LIMIT_MSG) {
-        showToast('Something went wrong — try emailing directly.', 'error');
-      }
-    }).observe(errorEl, { attributes: true, childList: true, attributeFilter: ['style'] });
-  }
+    } catch {
+      showToast('Something went wrong — try emailing directly.', 'error');
+      btn.textContent = 'Submit brief →';
+      btn.disabled = false;
+    }
+  });
 
   // ── Navigation ──
   function showPage(id) {
@@ -1466,6 +1503,6 @@
   // ── Init ──
   buildSkills();
 </script>
-<script src="https://unpkg.com/@formspree/ajax@1" defer></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </body>
 </html>
